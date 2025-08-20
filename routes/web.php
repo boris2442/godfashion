@@ -1,8 +1,9 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\ClientController;
+use App\Http\Controllers\Admin\CommandeController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -27,5 +28,16 @@ Route::prefix('admin')->group(function () {
 
     Route::get('/clients/{id}', [ClientController::class, 'show'])->name('admin.clients.show');
     Route::delete('/clients/{id}', [ClientController::class, 'destroy'])->name('admin.clients.destroy');
+
+
+    // Routes for Commandes
+    Route::get('/commandes/create', [CommandeController::class, 'create'])->name('admin.commandes.create');
+    Route::post('/commandes/store', [CommandeController::class, 'store'])->name('admin.commandes.store');
+    Route::get('/commandes', [CommandeController::class, 'index'])->name('admin.commandes.index');
+    Route::get('/commandes/{id}/edit', [CommandeController::class, 'edit'])->name('admin.commandes.edit');
+    Route::put('/commandes/{id}', [CommandeController::class, 'update'])->name('admin.commandes.update');
+    Route::delete('commandes/{commande}', [CommandeController::class, 'destroy'])->name('admin.commandes.destroy');
+
+    Route::get('/commandes/{id}', [CommandeController::class, 'show'])->name('admin.commandes.show');
 });
 require __DIR__ . '/auth.php';

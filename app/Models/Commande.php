@@ -6,6 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class Commande extends Model
 {
+    protected $guarded = [];
+    protected $casts = [
+        'date_livraison' => 'date',
+        'date_livraison_reelle' => 'datetime',
+    ];
+
     public function client()
     {
         return $this->belongsTo(Client::class);

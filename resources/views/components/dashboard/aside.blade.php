@@ -29,8 +29,8 @@ bg-blue-600
           {{ request()->routeIs('admin.clients.index') ? 'bg-blue-700 text-white' : 'text-gray-200' }}">
             <i class="fas fa-book mr-2"></i> Clients
         </a>
-        <a {{-- href="{{ route('admin.blogs.index') }}" --}} class="block py-2.5 px-4 rounded transition duration-200 ">
-            <i class="fas fa-layer-group mr-2"></i> Commande
+        <a href="{{ route('admin.commandes.index') }}" class="block py-2.5 px-4 rounded transition duration-200 ">
+            <i class="fas fa-layer-group mr-2"></i> Commandes
         </a>
         <a {{-- href="{{ route('admin.blogs.index') }}" --}} class="block py-2.5 px-4 rounded transition duration-200 ">
             <i class="fas fa-credit-card mr-2"></i> Paiements
