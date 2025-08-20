@@ -3,7 +3,8 @@
 <header class="h-16 bg-color1  shadow
  flex items-center
  fixed top-0 right-0 w-full
-  px-6 z-10">
+  px-6 z-10
+  bg-blue-600 text-white">
     <!-- Bouton hamburger visible uniquement sur mobile -->
     <button class="md:hidden p-2 text-color2 focus:outline-none mr-2" onclick="toggleSidebar()">
         <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">

@@ -89,7 +89,7 @@ class CommandeController extends Controller
     public function index()
     {
         // Récupérer toutes les commandes avec les relations éventuelles (ex: client)
-        $commandes = Commande::with('client')
+        $commandes = Commande::with('images','client')
             ->orderBy('created_at', 'desc')
             ->paginate(10); // Pagination de 10 commandes par page
 
