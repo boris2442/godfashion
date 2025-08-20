@@ -1,0 +1,9 @@
+#preview img {
+    height: 150px; /* tu peux ajuster */
+    border-radius: 8px;
+    object-fit: cover;
+    flex-shrink: 0; /* empêche l'image de rétrécir */
+}
+#preview {
+    scrollbar-width: thin;
+}

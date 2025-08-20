@@ -27,4 +27,8 @@ class Commande extends Model
         return $this->belongsToMany(Stock::class, 'commande_stocks')
             ->withPivot('quantite_utilisee');
     }
+    public function images()
+    {
+        return $this->hasMany(CommandeImage::class);
+    }
 }

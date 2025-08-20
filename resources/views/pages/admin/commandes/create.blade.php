@@ -95,7 +95,9 @@
                 multiple accept="image/*">
             @error('image_tissu') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
         </div>
-
+        <div id="preview" class="flex overflow-x-auto gap-2 mt-4">
+            <!-- Les images prévisualisées apparaîtront ici -->
+        </div>
         {{-- Bouton --}}
         <div class="pt-4">
             <button type="submit"
@@ -106,4 +108,22 @@
 
     </form>
 </div>
+<script>
+    document.getElementById('image_tissu').addEventListener('change', function(e) {
+    const preview = document.getElementById('preview');
+    preview.innerHTML = ''; // Vider l'ancien contenu
+
+    const files = e.target.files;
+
+    Array.from(files).forEach(file => {
+        const reader = new FileReader();
+        reader.onload = function(event) {
+            const img = document.createElement('img');
+            img.src = event.target.result;
+            preview.appendChild(img);
+        }
+        reader.readAsDataURL(file);
+    });
+});
+</script>
 @endsection

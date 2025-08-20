@@ -52,35 +52,40 @@ class CommandeController extends Controller
     //     return redirect()->route('admin.commandes.index')
     //         ->with('success', 'Commande ajoutée avec succès.');
     // }
-    public function store(CommandeRequest $request)
-    {
-        $imagePaths = [];
+   public function store(CommandeRequest $request)
+{
+    // 1️⃣ Création de la commande (sans images)
+    $commande = Commande::create([
+        'client_id' => $request->client_id,
+        'type_habit' => $request->type_habit,
+        'tissu' => $request->tissu,
+        'mesures' => $request->mesures,
+        'prix_total' => $request->prix_total,
+        'avance' => $request->avance ?? 0,
+        'date_livraison' => $request->date_livraison,
+        'statut' => $request->statut,
+    ]);
 
-        if ($request->hasFile('image_tissu')) {
-            foreach ($request->file('image_tissu') as $image) {
-                // Vérifie que le fichier est valide
-                if ($image->isValid()) {
-                    $imagePaths[] = $image->store('images/tissus', 'public');
-                }
+    // 2️⃣ Gestion des images
+    if ($request->hasFile('image_tissu')) {
+        foreach ($request->file('image_tissu') as $image) {
+            if ($image->isValid()) {
+                // Stocke l'image dans le dossier public
+                $chemin = $image->store('images/tissus', 'public');
+
+                // Crée une entrée dans la table commande_images
+                $commande->images()->create([
+                    'chemin_image' => $chemin,
+                ]);
             }
         }
-
-        // Création de la commande
-        Commande::create([
-            'client_id' => $request->client_id,
-            'type_habit' => $request->type_habit,
-            'tissu' => $request->tissu,
-            'mesures' => $request->mesures,
-            'prix_total' => $request->prix_total,
-            'avance' => $request->avance ?? 0,
-            'date_livraison' => $request->date_livraison,
-            'statut' => $request->statut,
-            'image_tissu' => json_encode($imagePaths), // ✅ Enregistre les chemins
-        ]);
-
-        return redirect()->route('admin.commandes.index')
-            ->with('success', 'Commande ajoutée avec succès.');
     }
+
+    // 3️⃣ Retour
+    return redirect()->route('admin.commandes.index')
+        ->with('success', 'Commande ajoutée avec succès.');
+}
+
     public function index()
     {
         // Récupérer toutes les commandes avec les relations éventuelles (ex: client)

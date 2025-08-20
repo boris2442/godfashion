@@ -24,6 +24,7 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     @endif
+    <link rel="stylesheet" href="{{ asset('styles/style.css') }}">
 </head>
 
 <body>
