@@ -2,10 +2,12 @@
 @section('title', 'Ajouter une commande')
 @section('content')
 <div class="max-w-4xl mx-auto p-6 bg-white dark:bg-gray-800 rounded-lg shadow">
-    <h1 class="text-2xl font-bold text-blue-900 dark:text-white mb-6">
-        Ajouter une commande
-    </h1>
-
+    <div class="">
+        <h1 class="text-2xl font-bold text-blue-900 dark:text-white mb-6">
+            Ajouter une commande
+        </h1>
+       
+    </div>
     <form action="{{ route('admin.commandes.store') }}" method="POST" enctype="multipart/form-data" class="space-y-4">
         @csrf
 
