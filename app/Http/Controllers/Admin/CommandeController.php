@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\Client;
 use App\Models\Commande;
+use App\Models\CommandeImage;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CommandeRequest;
@@ -21,75 +22,44 @@ class CommandeController extends Controller
     }
 
 
-    // public function store(CommandeRequest $request)
-    // {
-    //     $imagePaths = [];
+    public function store(CommandeRequest $request)
+    {
+        // 1️⃣ Création de la commande (sans images)
+        $commande = Commande::create([
+            'client_id' => $request->client_id,
+            'type_habit' => $request->type_habit,
+            'tissu' => $request->tissu,
+            'mesures' => $request->mesures,
+            'prix_total' => $request->prix_total,
+            'avance' => $request->avance ?? 0,
+            'date_livraison' => $request->date_livraison,
+            'statut' => $request->statut,
+        ]);
 
-    //     // Vérifie s'il y a des fichiers uploadés
-    //     if ($request->hasFile('image_tissu')) {
-    //         foreach ($request->file('image_tissu') as $image) {
-    //             // Stocke chaque image dans storage/app/public/images/tissus
-    //             $imagePaths[] = $image->store('images/tissus', 'public');
-    //         }
-    //     }
+        // 2️⃣ Gestion des images
+        if ($request->hasFile('image_tissu')) {
+            foreach ($request->file('image_tissu') as $image) {
+                if ($image->isValid()) {
+                    // Stocke l'image dans le dossier public
+                    $chemin = $image->store('images/tissus', 'public');
 
-    //     // Création de la commande
-    //     $commande = Commande::create([
-    //         'client_id' => $request->client_id,
-    //         'type_habit' => $request->type_habit,
-    //         'tissu' => $request->tissu,
-    //         'mesures' => $request->mesures,
-
-    //         'prix_total' => $request->prix_total,
-
-    //         'avance' => $request->avance ?? 0,
-    //         'date_livraison' => $request->date_livraison,
-    //         'statut' => $request->statut,
-    //         // Stocke les chemins des images en JSON
-    //         'image_tissu' => json_encode($imagePaths),
-    //     ]);
-
-    //     return redirect()->route('admin.commandes.index')
-    //         ->with('success', 'Commande ajoutée avec succès.');
-    // }
-   public function store(CommandeRequest $request)
-{
-    // 1️⃣ Création de la commande (sans images)
-    $commande = Commande::create([
-        'client_id' => $request->client_id,
-        'type_habit' => $request->type_habit,
-        'tissu' => $request->tissu,
-        'mesures' => $request->mesures,
-        'prix_total' => $request->prix_total,
-        'avance' => $request->avance ?? 0,
-        'date_livraison' => $request->date_livraison,
-        'statut' => $request->statut,
-    ]);
-
-    // 2️⃣ Gestion des images
-    if ($request->hasFile('image_tissu')) {
-        foreach ($request->file('image_tissu') as $image) {
-            if ($image->isValid()) {
-                // Stocke l'image dans le dossier public
-                $chemin = $image->store('images/tissus', 'public');
-
-                // Crée une entrée dans la table commande_images
-                $commande->images()->create([
-                    'chemin_image' => $chemin,
-                ]);
+                    // Crée une entrée dans la table commande_images
+                    $commande->images()->create([
+                        'chemin_image' => $chemin,
+                    ]);
+                }
             }
         }
-    }
 
-    // 3️⃣ Retour
-    return redirect()->route('admin.commandes.index')
-        ->with('success', 'Commande ajoutée avec succès.');
-}
+        // 3️⃣ Retour
+        return redirect()->route('admin.commandes.index')
+            ->with('success', 'Commande ajoutée avec succès.');
+    }
 
     public function index()
     {
         // Récupérer toutes les commandes avec les relations éventuelles (ex: client)
-        $commandes = Commande::with('images','client')
+        $commandes = Commande::with('images', 'client')
             ->orderBy('created_at', 'desc')
             ->paginate(10); // Pagination de 10 commandes par page
 
@@ -97,50 +67,38 @@ class CommandeController extends Controller
     }
     public function edit($id)
     {
-        $commande = Commande::findOrFail($id);
+        $commande = Commande::with('images')->findOrFail($id);
         $clients = Client::all(); // Pour le select client
         return view('pages.admin.commandes.edit', compact('commande', 'clients'));
     }
 
-    public function update(CommandeRequest $request, Commande $commande)
+    public function update(Request $request, $id)
     {
-
-        // Si une nouvelle image est envoyée
-        if ($request->hasFile('image')) {
-            // Supprimer l’ancienne image si elle existe
-            if ($commande->image) {
-                Storage::disk('public')->delete($commande->image);
-            }
-
-            // Stocker la nouvelle image
-            $imagePath = $request->file('image')->store('commandes', 'public');
-        } else {
-            $imagePath = $commande->image; // garder l’ancienne
-        }
-
-        // Mise à jour
-        $commande->update([
-            'client_id'           => $request->client_id,
-            'description'         => $request->description,
-            'mesures'             => $request->mesures,
-            'date_livraison'      => $request->date_livraison,
-            'date_livraison_reelle' => $request->date_livraison_reelle,
-            'status'              => $request->status,
-            'image'               => $imagePath,
+        // Valide les données
+        $data = $request->validate([
+            'client_id' => 'required|exists:clients,id',
+            'type_habit' => 'required|string|max:255',
+            'tissu' => 'nullable|string',
+            'mesures' => 'nullable|string',
+            'prix_total' => 'required|numeric|min:0',
+            'avance' => 'nullable|numeric|min:0',
+            'date_livraison' => 'required|date|after_or_equal:today',
         ]);
-
+        $commande = Commande::findOrFail($id);
+        // Mise à jour complète
+        $commande->update($data);
         return redirect()->route('admin.commandes.index')
             ->with('success', 'Commande mise à jour avec succès.');
     }
     public function destroy(Commande $commande)
     {
-        // Supprimer les images associées
+
         $imagePaths = json_decode($commande->image_tissu, true) ?? [];
         foreach ($imagePaths as $image) {
             Storage::disk('public')->delete($image);
         }
 
-        // Supprimer la commande
+
         $commande->delete();
 
         return redirect()->route('admin.commandes.index')

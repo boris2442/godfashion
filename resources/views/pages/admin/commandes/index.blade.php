@@ -36,37 +36,60 @@
                 <td class="px-4 py-2 border">{{ $commande->avance }} FCFA</td>
                 <td class="px-4 py-2 border">{{ $commande->statut }}</td>
                 <td class="px-4 py-2 border">{{ $commande->date_livraison->format('d/m/Y') }}</td>
+
+
+
                 {{-- <td class="px-4 py-2 border">
-                    @if($commande->image_tissu)
-                    @foreach(json_decode($commande->image_tissu) as $image)
-                    <img src="{{ asset('storage/'.$image) }}" alt="Tissu" class="w-16 h-16 object-cover mb-1">
-                    @endforeach
+                    @if($commande->images->count())
+                    @if($commande->images->count() === 1)
+
+                    <img src="{{ asset('storage/' . $commande->images->first()->chemin_image) }}" alt="Tissu"
+                        class="w-32 h-32 object-cover rounded">
+                    @else
+
+                    <div class="swiper mySwiper w-32 h-32">
+                        <div class="swiper-wrapper">
+                            @foreach($commande->images as $image)
+                            <div class="swiper-slide">
+                                <img src="{{ asset('storage/' . $image->chemin_image) }}" alt="Tissu"
+                                    class="w-full h-full object-cover rounded">
+                            </div>
+                            @endforeach
+                        </div>
+                        <div class="swiper-pagination"></div>
+                        <div class="swiper-button-next"></div>
+                        <div class="swiper-button-prev"></div>
+                    </div>
+                    @endif
                     @else
                     <span>Aucune image</span>
                     @endif
                 </td> --}}
                 <td class="px-4 py-2 border">
-                    @if($commande->image_tissu && json_decode($commande->image_tissu))
-                    <!-- Swiper -->
+                    @if($commande->images->count())
+                    @if($commande->images->count() === 1)
+                    <img src="{{ asset('storage/' . $commande->images->first()->chemin_image) }}" alt="Tissu"
+                        class="w-32 h-32 object-cover rounded">
+                    @else
                     <div class="swiper mySwiper w-32 h-32">
                         <div class="swiper-wrapper">
-                            @foreach(json_decode($commande->image_tissu) as $imagePath)
+                            @foreach($commande->images as $image)
                             <div class="swiper-slide">
-                                <img src="{{ asset('storage/' . $imagePath) }}" alt="Tissu"
+                                <img src="{{ asset('storage/' . $image->chemin_image) }}" alt="Tissu"
                                     class="w-full h-full object-cover rounded">
                             </div>
                             @endforeach
                         </div>
-                        <!-- Pagination -->
                         <div class="swiper-pagination"></div>
-                        <!-- Navigation -->
                         <div class="swiper-button-next"></div>
                         <div class="swiper-button-prev"></div>
                     </div>
+                    @endif
                     @else
                     <span>Aucune image</span>
                     @endif
                 </td>
+
 
                 <td class="px-4 py-2 border">
                     <a href="{{ route('admin.commandes.edit', $commande->id) }}"
@@ -91,7 +114,8 @@
 <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        const swipers = document.querySelectorAll('.mySwiper');
+    const swipers = document.querySelectorAll('.mySwiper');
+    if(swipers.length){
         swipers.forEach(swiperEl => {
             new Swiper(swiperEl, {
                 slidesPerView: 1,
@@ -119,8 +143,49 @@
                         spaceBetween: 20,
                     },
                 },
+                autoplay: {
+                    delay: 3000,
+                    disableOnInteraction: false,
+                },
             });
         });
-    });
+    }
+});
+
+// <script>
+// document.addEventListener('DOMContentLoaded', function () {
+//     const swipers = document.querySelectorAll('.mySwiper');
+//     if (swipers.length) {
+//         swipers.forEach(swiperEl => {
+//             new Swiper(swiperEl, {
+//                 slidesPerView: 1,
+//                 spaceBetween: 10,
+//                 loop: true,
+//                 autoplay: {
+//                     delay: 3000,           
+//                     disableOnInteraction: false, 
+//                 },
+//                 allowTouchMove: true,     
+//                 breakpoints: {
+//                     640: {
+//                         slidesPerView: 2,
+//                         spaceBetween: 10,
+//                     },
+//                     768: {
+//                         slidesPerView: 3,
+//                         spaceBetween: 15,
+//                     },
+//                     1024: {
+//                         slidesPerView: 4,
+//                         spaceBetween: 20,
+//                     },
+//                 },
+//             });
+//         });
+//     }
+// });
 </script>
+
+
+
 @endsection
