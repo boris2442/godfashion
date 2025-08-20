@@ -1,75 +1,52 @@
 <aside id="sidebar"
     class="min-w-64 header-home
-bg-color1  text-color2  shadow-lg min-h-screen fixed z-40 left-0 top-0 transform -translate-x-full md:translate-x-0 transition-transform duration-300 md:fixed md:block block md:min-w-64 "
+bg-blue-600 
+
+  text-white  shadow-lg min-h-screen fixed z-40 left-0 top-0 transform -translate-x-full md:translate-x-0 transition-transform duration-300 md:fixed md:block block md:min-w-64 "
     style="width: 16rem;">
 
-    <div class="h-16 flex items-center justify-center uppercase text-color2 font-bold text-xl titleentreprise">
+    <div class="h-16 flex items-center justify-center uppercase text-white font-bold text-xl titleentreprise">
         GODFASHION
     </div>
     <nav class="mt-6 px-4 space-y-2">
 
-        <a 
-        {{-- href="{{ route('home') }}" --}}
-         class="block py-2.5 px-4 rounded transition duration-200 ">
+        <a {{-- href="{{ route('home') }}" --}} class="block py-2.5 px-4 rounded transition duration-200 ">
             <i class="fas fa-home mr-2"></i> Accueil
         </a>
 
 
-        <a
-         {{-- href="{{ route('admin.dashboard') }}"  --}}
-        class="block py-2.5 px-4 rounded transition duration-200 ">
+        <a {{-- href="{{ route('admin.dashboard') }}" --}} class="block py-2.5 px-4 rounded transition duration-200 ">
             <i class="fas fa-chart-line mr-2"></i> Tableau de bord
         </a>
         {{-- @auth
         @if (auth()->user()->role==='admin') --}}
 
-        <a
-         {{-- href="{{ route('messages.index') }}" --}}
-          class="block py-2.5 px-4 rounded transition duration-200 ">
-            <i class="fas fa-envelope mr-2"></i> Messages
+
+
+        <a href="{{ route('admin.clients.index') }}" {{-- class="block py-2.5 px-4 rounded transition duration-200 "
+            --}} class="flex items-center py-2.5 px-4 rounded-lg transition duration-200
+          hover:bg-blue-600 hover:text-white
+          {{ request()->routeIs('admin.clients.index') ? 'bg-blue-700 text-white' : 'text-gray-200' }}">
+            <i class="fas fa-book mr-2"></i> Clients
+        </a>
+        <a {{-- href="{{ route('admin.blogs.index') }}" --}} class="block py-2.5 px-4 rounded transition duration-200 ">
+            <i class="fas fa-layer-group mr-2"></i> Commande
+        </a>
+        <a {{-- href="{{ route('admin.blogs.index') }}" --}} class="block py-2.5 px-4 rounded transition duration-200 ">
+            <i class="fas fa-credit-card mr-2"></i> Paiements
+        </a>
+        <a {{-- href="{{ route('admin.blogs.index') }}" --}} class="block py-2.5 px-4 rounded transition duration-200 ">
+            <i class="fas fa-boxes mr-2"></i> Stocks
         </a>
 
-        <a
-         {{-- href="{{ route('boutique.admin') }}" --}}
-          class="block py-2.5 px-4 rounded transition duration-200 ">
-            <i class="fas fa-book mr-2"></i> Boutiques
-        </a>
-        <a
-         {{-- href="{{ route('admin.blogs.index') }}" --}}
-          class="block py-2.5 px-4 rounded transition duration-200 ">
-            <i class="fas fa-layer-group mr-2"></i> Blogs
-        </a>
-        {{-- <a href="{{ route('specialites.index') }}" class="block py-2.5 px-4 rounded transition duration-200 ">
-            <i class="fas fa-certificate mr-2"></i> Spécialités
-        </a> --}}
-
-        {{-- @endauth --}}
-        <a
-         {{-- href="{{ route('users.index') }}" --}}
-          class="block py-2.5 px-4 rounded transition duration-200 ">
+        <a {{-- href="{{ route('users.index') }}" --}} class="block py-2.5 px-4 rounded transition duration-200 ">
             <i class="fas fa-users mr-2"></i> Utilisateurs
         </a>
 
-        <a 
-        {{-- href="{{ route('admin.services.index') }}" --}}
-         class="block py-2.5 px-4 rounded transition duration-200 ">
-            <i class="fas fa-concierge-bell mr-2"></i> Services
-        </a>
-        {{-- @endif
-        @endauth --}}
 
 
-        {{-- @auth
-        @if(auth()->user()->role==='comptable') --}}
-        <a {{-- href="{{ route('paiements.index') }}" --}} class="block py-2.5 px-4 rounded transition duration-200 ">
-            <i class="fas fa-credit-card mr-2"></i> Paiements
-        </a>
-        {{-- @endif
-        @endauth --}}
-        {{-- <a href="{{ route('logout') }}"
-            class="block py-2.5 px-4 rounded transition duration-200 bg-red-500 hover:bg-red-600 hover:text-white text-white dark:text-gray-200 ">
-            <i class="fas fa-sign-out-alt mr-2"></i> Déconnexion
-        </a> --}}
+
+
         <form method="POST" action="{{ route('logout') }}">
             @csrf
             <button type="submit"

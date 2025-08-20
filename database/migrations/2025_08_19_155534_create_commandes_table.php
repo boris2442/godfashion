@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('commandes', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('client_id')->constrained('clients')->onDelete('cascade');
+            $table->foreignId('client_id')->constrained('clients')->onDelete('cascade')->onUpdate('cascade');
             $table->string('type_habit');
             $table->text('tissu')->nullable(); // description du tissu (optionnel si géré par stock)
             $table->json('mesures')->nullable(); // ex: {"poitrine": 95, "taille": 80}
