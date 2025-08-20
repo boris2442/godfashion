@@ -39,7 +39,7 @@ bg-blue-600
             <i class="fas fa-boxes mr-2"></i> Stocks
         </a>
 
-        <a {{-- href="{{ route('users.index') }}" --}} class="block py-2.5 px-4 rounded transition duration-200 ">
+        <a href="{{ route('admin.users.index') }}" class="block py-2.5 px-4 rounded transition duration-200 ">
             <i class="fas fa-users mr-2"></i> Utilisateurs
         </a>
 

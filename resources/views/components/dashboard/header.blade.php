@@ -18,7 +18,7 @@
         {{-- @auth --}}
         <span class="text-color2 text-[12px] font-bold">Bienvenue,
 
-            {{-- {{auth()->user()->name}} --}}
+            {{auth()->user()->name}}
         </span>
 
         {{-- @endauth --}}
