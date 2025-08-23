@@ -5,6 +5,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\ClientController;
 use App\Http\Controllers\Admin\CommandeController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\PaiementController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -45,5 +46,9 @@ Route::prefix('admin')->group(function () {
     Route::get('/users', [UserController::class, 'index'])->name('admin.users.index');
     Route::delete('/users/{id}', [UserController::class, 'destroy'])->name('admin.users.destroy');
     // Route::get('/users/create', [UserController::class, 'create'])->name('admin.users.create');
+
+    //Route for Paiements
+    Route::get('/paiements/create', [PaiementController::class, 'create'])->name('admin.paiements.create');
+    // Route::post('/paiements/store', [PaiementController::class, 'store'])->name('admin.paiements.store');
 });
 require __DIR__ . '/auth.php';

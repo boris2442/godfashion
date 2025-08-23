@@ -1,6 +1,7 @@
 @extends('layouts.admin.layout-admin')
 @section('title', 'Liste des clients')
 @section('content')
+<section class="">
 <div class="container mx-auto p-4">
 
     {{-- <h1 class="text-2xl font-bold mb-4">Liste des commandes</h1> --}}
@@ -48,6 +49,7 @@
                 <th class="px-4 py-2 border">Id</th>
                 <th class="px-4 py-2 border">Name</th>
                 <th class="px-4 py-2 border">Email</th>
+                <th class="px-4 py-2 border">Role</th>
 
                 <th class="px-4 py-2 border">Actions</th>
             </tr>
@@ -58,13 +60,9 @@
                 <td class="px-4 py-2 border">{{ $user->id }}</td>
                 <td class="px-4 py-2 border">{{ $user->name }}</td>
                 <td class="px-4 py-2 border">{{ $user->email }}</td>
-
-
-
-
+                <td class="px-4 py-2 border">{{ $user->role }}</td>
                 <td class="px-4 py-2 border">
-                    {{-- <a href="{{ route('admin.users.edit', $user->id) }}"
-                        class="text-blue-500 hover:underline">Modifier</a> --}}
+                   
                     <form action="{{ route('admin.users.destroy', $user->id) }}" method="POST" class="inline">
                         @csrf
                         @method('DELETE')
@@ -83,6 +81,5 @@
         {{ $users->links() }}
     </div>
 </div>
-
+</section>
 @endsection
-{{-- <div class="min-h-screen bg-gray-50 dark:bg-neutral-900 py-10"> --}}
