@@ -20,4 +20,8 @@ class Client extends Model
     {
         return $this->belongsTo(User::class);
     }
+    public function paiements()
+    {
+        return $this->hasMany(Paiement::class);
+    }
 }

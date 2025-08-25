@@ -10,4 +10,8 @@ class Paiement extends Model
     {
         return $this->belongsTo(Commande::class);
     }
+    public function client()
+    {
+        return $this->belongsTo(Client::class, 'client_id');
+    }
 }

@@ -13,10 +13,13 @@ return new class extends Migration
     {
         Schema::create('stocks', function (Blueprint $table) {
             $table->id();
-            $table->string('nom_article'); // ex: "Soie rouge", "Boutons nacrés"
-            $table->string('type_article'); // ex: "Tissu", "Accessoire"
-            $table->integer('quantite'); // quantité disponible
-            $table->decimal('prix_unitaire', 10, 2)->nullable(); // prix d'achat
+            $table->foreignId('produit_id')->constrained('produits')->onDelete('cascade');
+
+            $table->integer('quantite_disponible');
+            $table->integer('quantite_min');
+            $table->integer('seuil_alerte')->nullable();
+            $table->datetime('date_dernier_maj')->nullable();
+
             $table->timestamps();
         });
     }
